@@ -22,7 +22,7 @@ const App = () => {
         setPersons(response)
       })
   }, [])
-  console.log('render', persons.length, 'notes')
+  console.log('render', persons.length, 'persons')
 
   const deletePerson = (id,name) => {
     if (window.confirm(`Delete ${name}?`)){
@@ -42,14 +42,22 @@ const App = () => {
     if (!alreadyAdded){
       personServices
       .create(personObject)
-      setPersons(persons.concat(personObject))
-      setErrorMessage(`Person ${newName} added!`)
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
-      setNewName('')
-      setNewNumber('')
-    }
+      .then((createdPerson) => {
+        setPersons(persons.concat(createdPerson))
+        setErrorMessage(`Person ${newName} added!`)
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+        setNewName('')
+        setNewNumber('')
+      })
+      .catch((error) => {
+        setErrorMessage(`Name is too short!`)
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+      })
+      }
     else {
       const person = persons.find((person) => (person.name === newName))
       const updatedNumber = { ...person, number: newNumber }
@@ -58,14 +66,21 @@ const App = () => {
       if (question){
         personServices
         .update(id, updatedNumber)
-        setPersons(persons.map((person) =>
-                person.id !== id ? person : updatedNumber))
+        .then((updatedPerson) => {
+          setPersons(persons.map((person) =>
+                person.id !== id ? person : updatedPerson))
         setErrorMessage(`${newName} has been updated`)
-          setTimeout(() => {
-            setErrorMessage(null)}, 5000)
+        setTimeout(() => {
+          setErrorMessage(null)}, 5000)
         setNewName('')
         setNewNumber('')
-          }
+        })
+        .catch(error => {
+          // pääset käsiksi palvelimen palauttamaan virheilmoitusolioon näin
+          console.log(error.response.data)
+        })
+        }
+      
       else{
       setErrorMessage(`Person ${newName} is already added!`)
         setTimeout(() => {
