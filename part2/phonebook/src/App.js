@@ -42,22 +42,14 @@ const App = () => {
     if (!alreadyAdded){
       personServices
       .create(personObject)
-      .then((createdPerson) => {
-        setPersons(persons.concat(createdPerson))
-        setErrorMessage(`Person ${newName} added!`)
-        setTimeout(() => {
-          setErrorMessage(null)
-        }, 5000)
-        setNewName('')
-        setNewNumber('')
-      })
-      .catch((error) => {
-        setErrorMessage(`Name is too short!`)
-        setTimeout(() => {
-          setErrorMessage(null)
-        }, 5000)
-      })
-      }
+      setPersons(persons.concat(personObject))
+      setErrorMessage(`Person ${newName} added!`)
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+      setNewName('')
+      setNewNumber('')
+    }
     else {
       const person = persons.find((person) => (person.name === newName))
       const updatedNumber = { ...person, number: newNumber }
@@ -66,21 +58,14 @@ const App = () => {
       if (question){
         personServices
         .update(id, updatedNumber)
-        .then((updatedPerson) => {
-          setPersons(persons.map((person) =>
-                person.id !== id ? person : updatedPerson))
+        setPersons(persons.map((person) =>
+                person.id !== id ? person : updatedNumber))
         setErrorMessage(`${newName} has been updated`)
-        setTimeout(() => {
-          setErrorMessage(null)}, 5000)
+          setTimeout(() => {
+            setErrorMessage(null)}, 5000)
         setNewName('')
         setNewNumber('')
-        })
-        .catch(error => {
-          // pääset käsiksi palvelimen palauttamaan virheilmoitusolioon näin
-          console.log(error.response.data)
-        })
-        }
-      
+          }
       else{
       setErrorMessage(`Person ${newName} is already added!`)
         setTimeout(() => {
@@ -131,3 +116,5 @@ const App = () => {
   )
 }  
 export default App 
+
+
