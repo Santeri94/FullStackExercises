@@ -42,13 +42,22 @@ const App = () => {
     if (!alreadyAdded){
       personServices
       .create(personObject)
-      setPersons(persons.concat(personObject))
-      setErrorMessage(`Person ${newName} added!`)
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+      .then(createdPerson => {
+        setPersons(persons.concat(createdPerson))
+        setErrorMessage(`Person ${newName} added!`)
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
       setNewName('')
       setNewNumber('')
+      })
+      .catch((error) => {
+        const errorNotification = error.response.data
+        setErrorMessage(`${errorNotification}`)
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+      })
     }
     else {
       const person = persons.find((person) => (person.name === newName))
@@ -116,5 +125,4 @@ const App = () => {
   )
 }  
 export default App 
-
 
