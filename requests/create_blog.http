@@ -1,0 +1,9 @@
+POST http://localhost:3003/api/blogs/ HTTP/1.1
+Content-Type: application/json
+
+{
+      "title": "MurderInKokkola", 
+      "author": "Silvia",
+      "url": "www.examaple.fi",
+      "likes": "16"
+}
